@@ -80,13 +80,19 @@ namespace test
                     tagsText.Any(tag =>
                     {
                         var match = condition._body.Match(tag);
-                        result[condition.name] = match.Value;
+                        if (match.Success && condition.extract)
+                        {
+                            result[condition.name] = match.Groups[1].Value;
+                        }
                         return match.Success;
                     })) &&
                 messages.All(condition =>
                     {
                         var match = condition._body.Match(messageText);
-                        result[condition.name] = match.Value;
+                        if (match.Success && condition.extract)
+                        {
+                            result[condition.name] = match.Groups[1].Value;
+                        }
                         return match.Success;
                     }) 
                     ? result
